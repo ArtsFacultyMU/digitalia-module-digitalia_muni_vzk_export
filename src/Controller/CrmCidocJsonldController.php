@@ -131,6 +131,11 @@ class CrmCidocJsonldController extends ControllerBase {
       "field_reference_download_links",
     ];
 
+    $decimal = [
+      "field_measurements_height_cm",
+      "field_measurements_width_cm",
+    ];
+
     foreach ($fields as $machine_name => &$value) {
       \Drupal::logger("DEBUG_LABEL")->debug(print_r($node->getFieldDefinition($machine_name)->getLabel(), TRUE));
       if (in_array($machine_name, $booleans)) {
@@ -197,6 +202,21 @@ class CrmCidocJsonldController extends ControllerBase {
               "type" => "datetime_default",
               "label" => "hidden",
               "settings" => ["format_type" => "short_date_only"],
+          ]));
+
+          array_push($elements, trim(strip_tags((string) $element)));
+        }
+
+        $value["value"] = implode(", ", $elements);
+        $value["value_list"] = $elements;
+
+      } else if (in_array($machine_name, $decimal)) {
+        $elements = array();
+        foreach ($node->get($machine_name) as $single_value) {
+          $element = \Drupal::service("renderer")->render($single_value->view([
+              "type" => "number_decimal",
+              "label" => "hidden",
+              "settings" => ["decimal_separator" => ",", "scale" => "1"],
           ]));
 
           array_push($elements, trim(strip_tags((string) $element)));
