@@ -1,0 +1,5 @@
+name: 'VZK Export'
+type: module
+description: 'Enables path with CRM-CIDOC mapping in jsonld'
+package: 'digitalia'
+core_version_requirement: ^10
